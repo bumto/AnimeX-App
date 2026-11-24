@@ -521,7 +521,7 @@ fun ProgressPosterCard(
             modifier = Modifier.padding(top = 8.dp),
         )
         Spacer(Modifier.height(4.dp))
-        val infoAlpha by androidx.compose.animation.core.animateFloatAsState(
+        val infoAlpha by com.uwu.animex.ui.common.animateFloatAsState(
             targetValue = if (loading) 0f else 1f,
             animationSpec = MaterialTheme.motionScheme.fastEffectsSpec(),
             label = "progressInfoAlpha",

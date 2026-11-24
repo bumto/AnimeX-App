@@ -1,6 +1,6 @@
 package com.uwu.animex.ui.auth
 
-import androidx.compose.animation.AnimatedVisibility
+import com.uwu.animex.ui.common.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer

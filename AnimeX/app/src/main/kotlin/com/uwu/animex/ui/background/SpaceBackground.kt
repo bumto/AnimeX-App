@@ -1,6 +1,6 @@
 package com.uwu.animex.ui.background
 
-import androidx.compose.animation.core.Animatable
+import com.uwu.animex.ui.common.Animatable
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas

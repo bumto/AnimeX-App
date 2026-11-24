@@ -1,6 +1,6 @@
 package com.uwu.animex.ui.character
 
-import androidx.compose.animation.AnimatedContent
+import com.uwu.animex.ui.common.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

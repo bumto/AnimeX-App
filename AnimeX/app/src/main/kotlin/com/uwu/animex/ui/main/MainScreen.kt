@@ -3,7 +3,7 @@
 package com.uwu.animex.ui.main
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.AnimatedContent
+import com.uwu.animex.ui.common.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

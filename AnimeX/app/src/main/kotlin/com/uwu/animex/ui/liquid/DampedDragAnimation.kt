@@ -1,6 +1,6 @@
 package com.uwu.animex.ui.liquid
 
-import androidx.compose.animation.core.Animatable
+import com.uwu.animex.ui.common.Animatable
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.MutatorMutex
 import androidx.compose.runtime.snapshotFlow

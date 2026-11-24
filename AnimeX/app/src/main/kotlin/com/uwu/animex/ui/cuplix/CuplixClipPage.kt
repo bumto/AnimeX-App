@@ -2,10 +2,10 @@ package com.uwu.animex.ui.cuplix
 
 import android.content.Context
 import android.os.Build
-import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateFloatAsState
+import com.uwu.animex.ui.common.animateContentSize
+import com.uwu.animex.ui.common.Animatable
+import com.uwu.animex.ui.common.animateDpAsState
+import com.uwu.animex.ui.common.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background

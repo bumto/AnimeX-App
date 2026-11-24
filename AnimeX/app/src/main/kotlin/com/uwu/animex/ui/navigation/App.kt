@@ -2,7 +2,6 @@ package com.uwu.animex.ui.navigation
 
 import android.content.res.Configuration
 import android.net.Uri
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,8 +18,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.focusable
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavType
@@ -31,7 +34,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.uwu.animex.data.api.CuplixFeed
 import com.uwu.animex.data.api.cuplixKey
-import com.uwu.animex.data.local.Appearance
 import com.uwu.animex.data.local.Onboarding
 import com.uwu.animex.data.local.PlayerPrefs
 import com.uwu.animex.data.model.Movie
@@ -39,11 +41,7 @@ import com.uwu.animex.data.model.toEpisodeIndex
 import com.uwu.animex.service.PlaybackSessions
 import com.uwu.animex.ui.anilist.AniListProfileScreen
 import com.uwu.animex.ui.auth.LoginScreen
-import com.uwu.animex.ui.background.AnimatedBackground
-import com.uwu.animex.ui.background.BackgroundType
 import com.uwu.animex.ui.background.LocalAnimatedBackgroundActive
-import com.uwu.animex.ui.background.rememberActiveBackground
-import com.uwu.animex.ui.common.AppMotion
 import com.uwu.animex.ui.common.LocalMiniPlayerInset
 import com.uwu.animex.ui.common.LocalOpenStatusSheet
 import com.uwu.animex.ui.common.OfflineBanner
@@ -55,6 +53,7 @@ import com.uwu.animex.ui.cuplix.clipStartTimeMs
 import com.uwu.animex.ui.detail.DetailScreen
 import com.uwu.animex.ui.discussion.DiscussionScreen
 import com.uwu.animex.ui.download.DownloadsPage
+import com.uwu.animex.ui.dpad.TvFocusProvider
 import com.uwu.animex.ui.list.FilterListScreen
 import com.uwu.animex.ui.list.ListScreen
 import com.uwu.animex.ui.main.MainScreen
@@ -63,7 +62,6 @@ import com.uwu.animex.ui.notifications.NotificationCenterScreen
 import com.uwu.animex.ui.onboarding.OnboardingScreen
 import com.uwu.animex.ui.player.MiniPlayerController
 import com.uwu.animex.ui.player.MiniPlayerDockedSpace
-import com.uwu.animex.ui.player.PipHelper
 import com.uwu.animex.ui.player.PlayerHost
 import com.uwu.animex.ui.profile.AboutScreen
 import com.uwu.animex.ui.search.CategoryScreen
@@ -187,15 +185,12 @@ fun App() {
         nav.navigate("filter/$kind/${Uri.encode(id)}?title=${Uri.encode(title)}")
     }
 
-    val appearance by Appearance.settings.collectAsStateWithLifecycle()
     val miniFloating by PlayerPrefs.miniPlayerFloating.collectAsStateWithLifecycle()
     val route = backEntry?.destination?.route ?: startDestination
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
-    val playerInPip by PipHelper.inPip.collectAsStateWithLifecycle()
     val playerActive = MiniPlayerController.request != null
     val playerExpanded = MiniPlayerController.expanded
-    val playerFullscreen = playerActive && playerExpanded && (isLandscape || playerInPip)
 
     val hidePlayerOverlay = route.startsWith("onboarding") || route.startsWith("cuplix")
     val hasFloatingBottomBar =
@@ -209,38 +204,32 @@ fun App() {
             0.dp
         }
 
-    val backgroundActive =
-        appearance.backgroundType != BackgroundType.NONE &&
-            !route.startsWith("onboarding") &&
-            !playerFullscreen
+    val backgroundActive = false
+    val focusRequester = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current
+    LaunchedEffect(route) {
+        focusRequester.requestFocus()
+        focusManager.moveFocus(FocusDirection.Down)
+    }
 
-    CompositionLocalProvider(
-        LocalOpenStatusSheet provides openStatusSheet,
-        LocalMiniPlayerInset provides miniPlayerInset,
-        LocalAnimatedBackgroundActive provides backgroundActive,
-        LocalContentColor provides MaterialTheme.colorScheme.onBackground,
-    ) {
-        Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
-            AnimatedVisibility(
-                visible = backgroundActive,
-                enter = AppMotion.fadeEnter(),
-                exit = AppMotion.fadeExit(),
+    TvFocusProvider {
+        CompositionLocalProvider(
+            LocalOpenStatusSheet provides openStatusSheet,
+            LocalMiniPlayerInset provides miniPlayerInset,
+            LocalAnimatedBackgroundActive provides backgroundActive,
+            LocalContentColor provides MaterialTheme.colorScheme.onBackground,
+        ) {
+            Box(
+                Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
+                    .focusRequester(focusRequester)
+                    .focusable(),
             ) {
-                AnimatedBackground(
-                    type = rememberActiveBackground(),
-                    enableParallax = appearance.backgroundParallax,
-                )
-            }
-            val density = LocalDensity.current
-            val slidePx = remember(density) { with(density) { AppMotion.SHARED_AXIS_SLIDE_DP.dp.roundToPx() } }
-            NavHost(
-                nav,
-                startDestination = startDestination,
-                enterTransition = { AppMotion.sharedAxisXEnter(forward = true, slidePx = slidePx) },
-                exitTransition = { AppMotion.sharedAxisXExit(forward = true, slidePx = slidePx) },
-                popEnterTransition = { AppMotion.sharedAxisXEnter(forward = false, slidePx = slidePx) },
-                popExitTransition = { AppMotion.sharedAxisXExit(forward = false, slidePx = slidePx) },
-            ) {
+                NavHost(
+                    nav,
+                    startDestination = startDestination,
+                ) {
                 composable("onboarding") {
                     OnboardingScreen(
                         onFinish = {
@@ -557,4 +546,5 @@ fun App() {
             }
         }
     }
+}
 }

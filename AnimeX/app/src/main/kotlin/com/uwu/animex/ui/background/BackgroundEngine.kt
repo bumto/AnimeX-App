@@ -5,7 +5,7 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import androidx.compose.animation.core.Animatable
+import com.uwu.animex.ui.common.Animatable
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.withInfiniteAnimationFrameMillis
@@ -33,14 +33,7 @@ private const val TILT_TARGET_THRESHOLD = 0.02f
 private const val ANIMATED_TIME_WRAP_MS = 3_600_000f
 
 @Composable
-fun AnimationFrameEffect(frameLoop: suspend CoroutineScope.() -> Unit) {
-    val lifecycleOwner = LocalLifecycleOwner.current
-    LaunchedEffect(lifecycleOwner) {
-        lifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
-            frameLoop()
-        }
-    }
-}
+fun AnimationFrameEffect(frameLoop: suspend CoroutineScope.() -> Unit) = Unit
 
 @Composable
 fun BackgroundStepEffect(

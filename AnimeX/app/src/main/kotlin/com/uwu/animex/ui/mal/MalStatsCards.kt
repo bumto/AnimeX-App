@@ -2,7 +2,7 @@
 
 package com.uwu.animex.ui.mal
 
-import androidx.compose.animation.AnimatedContent
+import com.uwu.animex.ui.common.AnimatedContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi

@@ -2,7 +2,7 @@
 
 package com.uwu.animex.ui.common
 
-import androidx.compose.animation.core.animateDpAsState
+import com.uwu.animex.ui.common.animateDpAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

@@ -1,15 +1,13 @@
 package com.uwu.animex.ui.theme
 
 import android.os.Build
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.snap
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.MotionScheme
 import androidx.compose.material3.Shapes
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
@@ -21,6 +19,7 @@ import com.uwu.animex.data.local.PaletteStyle
 import com.uwu.animex.data.local.RoleOverrides
 import com.uwu.animex.data.local.ThemeMode
 import com.uwu.animex.data.local.seedColor
+import com.uwu.animex.ui.common.NoMotionScheme
 import com.materialkolor.PaletteStyle as KolorPaletteStyle
 import com.materialkolor.dynamiccolor.ColorSpec as KolorColorSpec
 import com.materialkolor.material3.dynamicColorScheme as kolorScheme
@@ -134,17 +133,14 @@ fun AppTheme(
             specVersion = resolveSpecVersion(settings.paletteStyle, settings.colorSpec),
         )
 
-    val colorSpec =
-        remember(settings.colorAnimationMs) {
-            tween<Color>(durationMillis = settings.colorAnimationMs)
-        }
+    val colorSpec = snap<Color>()
 
     DynamicMaterialExpressiveTheme(
         state = state,
-        motionScheme = MotionScheme.expressive(),
+        motionScheme = NoMotionScheme,
         shapes = AppShapes,
         typography = AppTypography,
-        animate = settings.animateColorChange,
+        animate = false,
         animationSpec = colorSpec,
         content = content,
     )

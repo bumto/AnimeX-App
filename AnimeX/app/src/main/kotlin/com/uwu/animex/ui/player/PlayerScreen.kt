@@ -13,8 +13,8 @@ import android.provider.Settings
 import android.view.OrientationEventListener
 import android.view.WindowManager
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.Animatable
+import com.uwu.animex.ui.common.AnimatedVisibility
+import com.uwu.animex.ui.common.Animatable
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background

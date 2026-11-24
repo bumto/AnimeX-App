@@ -1,37 +1,14 @@
 package com.uwu.animex.ui.common
 
-import android.os.SystemClock
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.SizeTransform
-import androidx.compose.animation.core.CubicBezierEasing
-import androidx.compose.animation.core.FastOutLinearInEasing
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.animation.core.MutableTransitionState
-import androidx.compose.animation.core.rememberTransition
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandHorizontally
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
-import androidx.compose.animation.shrinkHorizontally
-import androidx.compose.animation.shrinkVertically
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyItemScope
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MotionScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -40,9 +17,6 @@ import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.liveRegion
-import androidx.compose.ui.unit.IntOffset
-import androidx.compose.ui.unit.IntSize
-import kotlinx.coroutines.delay
 
 object AppMotion {
     const val FADE_OUT_MS = 90
@@ -54,126 +28,60 @@ object AppMotion {
     const val SHARED_AXIS_SLIDE_DP = 30
     const val FADE_THROUGH_START_SCALE = 0.92f
 
-    private val EmphasizedDecelerate = CubicBezierEasing(0.05f, 0.7f, 0.1f, 1f)
-    private val EmphasizedAccelerate = CubicBezierEasing(0.3f, 0f, 0.8f, 0.15f)
+    fun fadeThrough(): ContentTransform = ContentTransform(EnterTransition.None, ExitTransition.None)
 
-    private val fadeThroughEnter: EnterTransition =
-        fadeIn(tween(FADE_IN_MS, delayMillis = FADE_OUT_MS, easing = LinearOutSlowInEasing)) +
-            scaleIn(
-                tween(FADE_THROUGH_SCALE_MS, delayMillis = FADE_OUT_MS, easing = EmphasizedDecelerate),
-                initialScale = FADE_THROUGH_START_SCALE,
-            )
-    private val fadeThroughExit: ExitTransition =
-        fadeOut(tween(FADE_OUT_MS, easing = FastOutLinearInEasing))
-
-    fun fadeThrough(): ContentTransform =
-        ContentTransform(fadeThroughEnter, fadeThroughExit, sizeTransform = SizeTransform(clip = false))
-
-    fun crossfade(m: MotionScheme): ContentTransform =
-        ContentTransform(
-            fadeIn(m.fastEffectsSpec<Float>()),
-            fadeOut(m.fastEffectsSpec<Float>()),
-            sizeTransform = SizeTransform(clip = false),
-        )
+    fun crossfade(motionScheme: MotionScheme): ContentTransform =
+        ContentTransform(EnterTransition.None, ExitTransition.None)
 
     fun sharedAxisXEnter(
         forward: Boolean,
         slidePx: Int,
-    ): EnterTransition =
-        fadeIn(tween(FADE_IN_MS, delayMillis = FADE_OUT_MS, easing = LinearOutSlowInEasing)) +
-            slideInHorizontally(tween(SHARED_AXIS_MS, easing = FastOutSlowInEasing)) {
-                if (forward) slidePx else -slidePx
-            }
+    ): EnterTransition = EnterTransition.None
 
     fun sharedAxisXExit(
         forward: Boolean,
         slidePx: Int,
-    ): ExitTransition =
-        fadeOut(tween(FADE_OUT_MS, easing = FastOutLinearInEasing)) +
-            slideOutHorizontally(tween(SHARED_AXIS_MS, easing = FastOutSlowInEasing)) {
-                if (forward) -slidePx else slidePx
-            }
+    ): ExitTransition = ExitTransition.None
 
     @Composable
-    fun fadeEnter(): EnterTransition = fadeIn(MaterialTheme.motionScheme.defaultEffectsSpec<Float>())
+    fun fadeEnter(): EnterTransition = EnterTransition.None
 
     @Composable
-    fun fadeExit(): ExitTransition = fadeOut(MaterialTheme.motionScheme.fastEffectsSpec<Float>())
+    fun fadeExit(): ExitTransition = ExitTransition.None
 
     @Composable
-    fun popEnter(): EnterTransition {
-        val m = MaterialTheme.motionScheme
-        return fadeIn(m.defaultEffectsSpec<Float>()) +
-            scaleIn(m.defaultSpatialSpec<Float>(), initialScale = FADE_THROUGH_START_SCALE)
-    }
+    fun popEnter(): EnterTransition = EnterTransition.None
 
     @Composable
-    fun popExit(): ExitTransition {
-        val m = MaterialTheme.motionScheme
-        return fadeOut(m.fastEffectsSpec<Float>()) +
-            scaleOut(m.fastSpatialSpec<Float>(), targetScale = FADE_THROUGH_START_SCALE)
-    }
+    fun popExit(): ExitTransition = ExitTransition.None
 
     @Composable
-    fun expandEnter(): EnterTransition {
-        val m = MaterialTheme.motionScheme
-        return fadeIn(m.defaultEffectsSpec<Float>()) + expandVertically(m.defaultSpatialSpec<IntSize>())
-    }
+    fun expandEnter(): EnterTransition = EnterTransition.None
 
     @Composable
-    fun expandExit(): ExitTransition {
-        val m = MaterialTheme.motionScheme
-        return fadeOut(m.fastEffectsSpec<Float>()) + shrinkVertically(m.fastSpatialSpec<IntSize>())
-    }
+    fun expandExit(): ExitTransition = ExitTransition.None
 
     @Composable
-    fun expandHorizontalEnter(): EnterTransition {
-        val m = MaterialTheme.motionScheme
-        return fadeIn(m.defaultEffectsSpec<Float>()) + expandHorizontally(m.defaultSpatialSpec<IntSize>())
-    }
+    fun expandHorizontalEnter(): EnterTransition = EnterTransition.None
 
     @Composable
-    fun expandHorizontalExit(): ExitTransition {
-        val m = MaterialTheme.motionScheme
-        return fadeOut(m.fastEffectsSpec<Float>()) + shrinkHorizontally(m.fastSpatialSpec<IntSize>())
-    }
+    fun expandHorizontalExit(): ExitTransition = ExitTransition.None
 
     @Composable
-    fun slideInEnd(): EnterTransition = slideInHorizontally(tween(SHARED_AXIS_MS, easing = EmphasizedDecelerate)) { it }
+    fun slideInEnd(): EnterTransition = EnterTransition.None
 
     @Composable
-    fun slideOutEnd(): ExitTransition = slideOutHorizontally(tween(FADE_IN_MS, easing = EmphasizedAccelerate)) { it }
+    fun slideOutEnd(): ExitTransition = ExitTransition.None
 }
 
 @Composable
-fun LazyItemScope.animateItemExpressive(): Modifier {
-    val m = MaterialTheme.motionScheme
-    return Modifier.animateItem(
-        fadeInSpec = m.defaultEffectsSpec<Float>(),
-        placementSpec = m.defaultSpatialSpec<IntOffset>(),
-        fadeOutSpec = m.fastEffectsSpec<Float>(),
-    )
-}
-
-private const val SKELETON_MIN_VISIBLE_MS = 220L
+fun LazyItemScope.animateItemExpressive(): Modifier = Modifier
 
 @Composable
 fun <P> rememberHeldPhase(
     target: P,
     loadingPhase: P,
-): P {
-    var shown by remember { mutableStateOf(target) }
-    var loadingSince by remember { mutableLongStateOf(SystemClock.uptimeMillis()) }
-    LaunchedEffect(target) {
-        if (target == loadingPhase) {
-            if (shown != loadingPhase) loadingSince = SystemClock.uptimeMillis()
-        } else if (shown == loadingPhase) {
-            delay(SKELETON_MIN_VISIBLE_MS - (SystemClock.uptimeMillis() - loadingSince))
-        }
-        shown = target
-    }
-    return shown
-}
+): P = target
 
 private enum class UiPhase { Loading, Error, Ready }
 
@@ -186,27 +94,21 @@ fun <T> UiStateContent(
     error: @Composable (String) -> Unit = { msg -> ErrorState(msg, onRetry) },
     content: @Composable (T) -> Unit,
 ) {
-    val target =
+    val phase =
         when (state) {
             is UiState.Error -> UiPhase.Error
             is UiState.Ready -> UiPhase.Ready
             else -> UiPhase.Loading
         }
-    val phase = rememberHeldPhase(target, UiPhase.Loading)
+    val shownPhase = rememberHeldPhase(phase, UiPhase.Loading)
 
     var lastReady by remember { mutableStateOf<UiState.Ready<T>?>(null) }
     var lastError by remember { mutableStateOf("") }
     if (state is UiState.Ready<T>) lastReady = state
     if (state is UiState.Error) lastError = state.msg
 
-    val transitionState = remember { MutableTransitionState(phase) }
-    transitionState.targetState = phase
-
-    rememberTransition(transitionState, label = "ui-state").AnimatedContent(
-        transitionSpec = { AppMotion.fadeThrough() },
-        modifier = modifier.fillMaxSize(),
-    ) { p ->
-        when (p) {
+    Box(modifier.fillMaxSize()) {
+        when (shownPhase) {
             UiPhase.Loading -> {
                 Box(
                     Modifier.fillMaxSize().clearAndSetSemantics {

@@ -1,6 +1,6 @@
 package com.uwu.animex.ui.common
 
-import androidx.compose.animation.core.Animatable
+import com.uwu.animex.ui.common.Animatable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme

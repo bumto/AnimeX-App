@@ -1,7 +1,7 @@
 package com.uwu.animex.ui.common
 
 import android.content.res.Configuration
-import androidx.compose.animation.AnimatedVisibility
+import com.uwu.animex.ui.common.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope

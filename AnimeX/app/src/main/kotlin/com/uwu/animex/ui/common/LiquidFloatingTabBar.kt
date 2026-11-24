@@ -1,7 +1,7 @@
 package com.uwu.animex.ui.common
 
 import android.os.Build
-import androidx.compose.animation.core.Animatable
+import com.uwu.animex.ui.common.Animatable
 import androidx.compose.animation.core.EaseOut
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Arrangement

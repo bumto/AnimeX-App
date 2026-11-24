@@ -3,8 +3,8 @@
 package com.uwu.animex.ui.detail
 
 import android.content.Context
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedVisibility
+import com.uwu.animex.ui.common.AnimatedContent
+import com.uwu.animex.ui.common.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

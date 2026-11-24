@@ -2,8 +2,8 @@
 
 package com.uwu.animex.ui.search
 
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateFloatAsState
+import com.uwu.animex.ui.common.animateDpAsState
+import com.uwu.animex.ui.common.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource

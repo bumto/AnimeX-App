@@ -7,8 +7,8 @@ import android.media.AudioManager
 import android.media.audiofx.LoudnessEnhancer
 import android.os.SystemClock
 import android.provider.Settings
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.animateDpAsState
+import com.uwu.animex.ui.common.AnimatedVisibility
+import com.uwu.animex.ui.common.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut

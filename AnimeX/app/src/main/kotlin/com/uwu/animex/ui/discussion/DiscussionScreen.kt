@@ -3,11 +3,10 @@
 package com.uwu.animex.ui.discussion
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.animateColorAsState
+import com.uwu.animex.ui.common.AnimatedContent
+import com.uwu.animex.ui.common.animateColorAsState
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
@@ -703,13 +702,7 @@ private fun SwipeToReply(
                 if (!enabled) return@pointerInput
                 var crossed = false
                 val settle: () -> Unit = {
-                    scope.launch {
-                        animate(
-                            initialValue = offset,
-                            targetValue = 0f,
-                            animationSpec = spring(Spring.DampingRatioMediumBouncy, Spring.StiffnessMediumLow),
-                        ) { value, _ -> offset = value }
-                    }
+                    offset = 0f
                 }
                 detectHorizontalDragGestures(
                     onDragStart = { crossed = false },

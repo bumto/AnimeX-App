@@ -3,9 +3,7 @@
 package com.uwu.animex.ui.list
 
 import android.widget.Toast
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.core.MutableTransitionState
-import androidx.compose.animation.core.rememberTransition
+import com.uwu.animex.ui.common.AnimatedContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
@@ -70,7 +68,6 @@ import com.uwu.animex.ui.common.AnimatedEmptyState
 import com.uwu.animex.ui.common.AppBadgedBox
 import com.uwu.animex.ui.common.AppDropdownMenu
 import com.uwu.animex.ui.common.AppModalBottomSheet
-import com.uwu.animex.ui.common.AppMotion
 import com.uwu.animex.ui.common.BlurContentBox
 import com.uwu.animex.ui.common.ContinueWatchingGrid
 import com.uwu.animex.ui.common.ExpressivePullToRefreshBox
@@ -175,10 +172,8 @@ fun ListScreen(
                         history.isEmpty() -> HistoryPhase.Empty
                         else -> HistoryPhase.Content
                     }
-                val transitionState = remember { MutableTransitionState(phase) }
-                transitionState.targetState = phase
-                rememberTransition(transitionState, label = "history-phase").AnimatedContent(
-                    transitionSpec = { AppMotion.fadeThrough() },
+                AnimatedContent(
+                    targetState = phase,
                     modifier = Modifier.fillMaxSize(),
                 ) { p ->
                     when (p) {

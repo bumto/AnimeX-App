@@ -3,7 +3,7 @@
 package com.uwu.animex.ui.player
 
 import android.os.SystemClock
-import androidx.compose.animation.AnimatedVisibility
+import com.uwu.animex.ui.common.AnimatedVisibility
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

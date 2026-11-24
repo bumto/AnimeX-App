@@ -2,9 +2,7 @@
 
 package com.uwu.animex.ui.common
 
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.core.MutableTransitionState
-import androidx.compose.animation.core.rememberTransition
+import com.uwu.animex.ui.common.AnimatedContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -172,10 +170,8 @@ fun PaginatedMovieGrid(
                 else -> PagedPhase.Content
             }
         val phase = rememberHeldPhase(targetPhase, PagedPhase.Loading)
-        val transitionState = remember { MutableTransitionState(phase) }
-        transitionState.targetState = phase
-        rememberTransition(transitionState, label = "paged-grid-phase").AnimatedContent(
-            transitionSpec = { AppMotion.fadeThrough() },
+        AnimatedContent(
+            targetState = phase,
             modifier = Modifier.fillMaxSize(),
         ) { p ->
             when (p) {

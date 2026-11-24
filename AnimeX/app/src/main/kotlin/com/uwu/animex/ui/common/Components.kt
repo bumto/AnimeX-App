@@ -5,7 +5,7 @@ package com.uwu.animex.ui.common
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
+import com.uwu.animex.ui.common.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -125,7 +125,6 @@ fun Poster(
             ImageRequest
                 .Builder(ctx)
                 .data(data)
-                .crossfade(AppMotion.IMAGE_CROSSFADE_MS)
                 .apply { if (attempt > 0) memoryCacheKeyExtra("retry", attempt.toString()) }
                 .build()
         }

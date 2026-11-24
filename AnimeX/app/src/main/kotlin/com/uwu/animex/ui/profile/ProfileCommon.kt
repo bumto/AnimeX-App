@@ -6,7 +6,7 @@
 
 package com.uwu.animex.ui.profile
 
-import androidx.compose.animation.AnimatedContent
+import com.uwu.animex.ui.common.AnimatedContent
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
