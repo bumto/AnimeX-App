@@ -68,11 +68,6 @@ object PrefKeys {
         const val LAST_RANDOM = "last_random_background"
     }
 
-    object BatteryOptimization {
-        const val FILE = "battery_optimization_prefs"
-        const val DISMISSED = "prompt_dismissed"
-    }
-
     object Bookmarks {
         const val FILE = "bookmarks_meta"
         const val LOCAL_FAVORITES_DROPPED = "local_favorites_dropped"

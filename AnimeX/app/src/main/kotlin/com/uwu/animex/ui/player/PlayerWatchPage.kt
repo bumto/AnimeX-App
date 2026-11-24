@@ -134,7 +134,6 @@ import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.uwu.animex.core.network.runSuspendCatching
 import com.uwu.animex.core.network.toUserMessage
-import com.uwu.animex.core.notification.BatteryOptimization
 import com.uwu.animex.data.anilist.AniList
 import com.uwu.animex.data.api.AniZip
 import com.uwu.animex.data.api.AniZipEpisode
@@ -160,7 +159,6 @@ import com.uwu.animex.ui.common.AppDialog
 import com.uwu.animex.ui.common.AppDropdownMenu
 import com.uwu.animex.ui.common.AppLoadingIndicator
 import com.uwu.animex.ui.common.AppMotion
-import com.uwu.animex.ui.common.BatteryOptimizationDialog
 import com.uwu.animex.ui.common.DialogCancelButton
 import com.uwu.animex.ui.common.DialogOptionRow
 import com.uwu.animex.ui.common.DiscussionListPlaceholder
@@ -1805,7 +1803,6 @@ private fun rememberEpisodeDownload(
     val scope = rememberCoroutineScope()
     var pendingEp by remember { mutableStateOf<Episode?>(null) }
     var pick by remember { mutableStateOf<Pair<Episode, List<Server>>?>(null) }
-    var showBatteryDialog by remember { mutableStateOf(false) }
     var asked by rememberSaveable { mutableStateOf(false) }
     val permission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {}
 
@@ -1831,7 +1828,6 @@ private fun rememberEpisodeDownload(
             ),
         )
         snackbar.show(scope, "Lagi ngunduh Episode ${ep.index.orEmpty()}")
-        if (BatteryOptimization.shouldPrompt(ctx)) showBatteryDialog = true
     }
 
     fun loadServers(ep: Episode) {
@@ -1889,16 +1885,6 @@ private fun rememberEpisodeDownload(
             pendingEp = ep
             folderPicker.launch(Downloads.folderUri.value?.let(Uri::parse))
         }
-    }
-
-    if (showBatteryDialog) {
-        BatteryOptimizationDialog(
-            onDismiss = { showBatteryDialog = false },
-            title = "Biar unduhan gak putus",
-            message =
-                "Hemat baterai bisa nahan unduhan AnimeX pas layar mati atau app di latar belakang. " +
-                    "Matiin pembatasan baterai buat AnimeX supaya unduhan lanjut terus.",
-        )
     }
 
     pick?.let { (ep, servers) ->

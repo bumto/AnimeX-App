@@ -51,7 +51,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.uwu.animex.core.network.runSuspendCatching
 import com.uwu.animex.core.network.toUserMessage
-import com.uwu.animex.core.notification.BatteryOptimization
 import com.uwu.animex.data.anilist.AniListTracker
 import com.uwu.animex.data.api.Api
 import com.uwu.animex.data.download.Downloads
@@ -68,7 +67,6 @@ import com.uwu.animex.ui.character.CharacterListTab
 import com.uwu.animex.ui.common.AppDialog
 import com.uwu.animex.ui.common.AppModalBottomSheet
 import com.uwu.animex.ui.common.AppMotion
-import com.uwu.animex.ui.common.BatteryOptimizationDialog
 import com.uwu.animex.ui.common.DialogCancelButton
 import com.uwu.animex.ui.common.DialogOptionRow
 import com.uwu.animex.ui.common.EpisodeRowPlaceholder
@@ -245,7 +243,6 @@ internal fun EpisodeListContent(
     val ctx = LocalContext.current
     var pendingEp by remember { mutableStateOf<Episode?>(null) }
     var pick by remember { mutableStateOf<Pair<Episode, List<Server>>?>(null) }
-    var showBatteryDialog by remember { mutableStateOf(false) }
     var asked by rememberSaveable { mutableStateOf(false) }
     val permission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {}
 
@@ -421,7 +418,6 @@ internal fun EpisodeListContent(
             ),
         )
         snackbar.show(scope, "Lagi ngunduh Episode ${ep.index.orEmpty()}")
-        if (BatteryOptimization.shouldPrompt(ctx)) showBatteryDialog = true
     }
 
     fun loadServers(ep: Episode) {
@@ -651,16 +647,6 @@ internal fun EpisodeListContent(
             Downloads.setFolder(ctx, uri)
             if (ep != null) proceedDownload(ep)
         }
-
-    if (showBatteryDialog) {
-        BatteryOptimizationDialog(
-            onDismiss = { showBatteryDialog = false },
-            title = "Biar unduhan gak putus",
-            message =
-                "Hemat baterai bisa nahan unduhan AnimeX pas layar mati atau app di latar belakang. " +
-                    "Matiin pembatasan baterai buat AnimeX supaya unduhan lanjut terus.",
-        )
-    }
 
     pick?.let { (ep, servers) ->
         AppDialog(

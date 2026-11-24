@@ -17,14 +17,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import androidx.documentfile.provider.DocumentFile
 import com.uwu.animex.core.network.runSuspendCatching
-import com.uwu.animex.core.notification.BatteryOptimization
 import com.uwu.animex.data.api.Api
 import com.uwu.animex.data.api.cuplixKey
 import com.uwu.animex.data.download.Downloads
 import com.uwu.animex.data.model.Cuplix
 import com.uwu.animex.data.model.Server
 import com.uwu.animex.data.model.toEpisodeIndex
-import com.uwu.animex.ui.common.BatteryOptimizationDialog
 import com.uwu.animex.ui.detail.bestDirect
 import kotlinx.coroutines.launch
 
@@ -56,7 +54,6 @@ internal fun rememberClipDownload(onMessage: (String) -> Unit): (Cuplix) -> Unit
     val ctx = LocalContext.current
     val scope = rememberCoroutineScope()
     var pending by remember { mutableStateOf<Cuplix?>(null) }
-    var showBatteryDialog by remember { mutableStateOf(false) }
     var asked by rememberSaveable { mutableStateOf(false) }
     val permission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {}
 
@@ -94,7 +91,6 @@ internal fun rememberClipDownload(onMessage: (String) -> Unit): (Cuplix) -> Unit
                 ),
             )
             onMessage("Lagi ngunduh Cuplix")
-            if (BatteryOptimization.shouldPrompt(ctx)) showBatteryDialog = true
         }
     }
 
@@ -106,16 +102,6 @@ internal fun rememberClipDownload(onMessage: (String) -> Unit): (Cuplix) -> Unit
             Downloads.setFolder(ctx, uri)
             if (clip != null) proceed(clip)
         }
-
-    if (showBatteryDialog) {
-        BatteryOptimizationDialog(
-            onDismiss = { showBatteryDialog = false },
-            title = "Biar unduhan gak putus",
-            message =
-                "Hemat baterai bisa nahan unduhan AnimeX pas layar mati atau app di latar belakang. " +
-                    "Matiin pembatasan baterai buat AnimeX supaya unduhan lanjut terus.",
-        )
-    }
 
     return { clip ->
         val folderOk =

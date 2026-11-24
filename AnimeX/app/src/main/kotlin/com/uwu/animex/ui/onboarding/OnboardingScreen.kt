@@ -39,7 +39,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.automirrored.outlined.ArrowForward
 import androidx.compose.material.icons.outlined.Alarm
-import androidx.compose.material.icons.outlined.BatteryChargingFull
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Download
 import androidx.compose.material.icons.outlined.Explore
@@ -81,7 +80,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.uwu.animex.core.notification.AppNotifier
-import com.uwu.animex.core.notification.BatteryOptimization
 import com.uwu.animex.notifications.AlarmManagerScheduler
 import com.uwu.animex.ui.common.AppMotion
 import com.uwu.animex.ui.common.hapticClick
@@ -499,9 +497,7 @@ private fun PageIndicator(
 }
 
 fun needsNotificationSetup(context: Context): Boolean =
-    !AppNotifier.canPost(context) ||
-        !AlarmManagerScheduler.canScheduleExact(context) ||
-        BatteryOptimization.isRestricted(context)
+    !AppNotifier.canPost(context) || !AlarmManagerScheduler.canScheduleExact(context)
 
 private data class SetupItem(
     val icon: ImageVector,
@@ -524,12 +520,10 @@ private fun rememberSetupState(): SetupState {
 
     var notifOk by remember { mutableStateOf(AppNotifier.canPost(ctx)) }
     var alarmOk by remember { mutableStateOf(AlarmManagerScheduler.canScheduleExact(ctx)) }
-    var batteryOk by remember { mutableStateOf(!BatteryOptimization.isRestricted(ctx)) }
 
     fun refresh() {
         notifOk = AppNotifier.canPost(ctx)
         alarmOk = AlarmManagerScheduler.canScheduleExact(ctx)
-        batteryOk = !BatteryOptimization.isRestricted(ctx)
     }
 
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -569,14 +563,6 @@ private fun rememberSetupState(): SetupState {
                 body = "Biar notif muncul pas banget saat episodenya rilis, bukan telat.",
                 granted = alarmOk,
                 onGrant = { AlarmManagerScheduler.openExactAlarmSettings(ctx) },
-            ),
-            SetupItem(
-                icon = Icons.Outlined.BatteryChargingFull,
-                title = "Jangan sampai dimatiin sistem",
-                cta = "Izinkan di background",
-                body = "Matiin pembatasan baterai biar AnimeX nggak dimatiin sistem pas lagi di background.",
-                granted = batteryOk,
-                onGrant = { BatteryOptimization.requestIgnore(ctx) },
             ),
         ),
     )
