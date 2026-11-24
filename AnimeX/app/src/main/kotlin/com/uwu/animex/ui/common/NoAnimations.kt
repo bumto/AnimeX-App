@@ -8,17 +8,21 @@ import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.FiniteAnimationSpec
 import androidx.compose.animation.core.snap
 import androidx.compose.material3.MotionScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
@@ -39,8 +43,8 @@ object NoMotionScheme : MotionScheme {
 }
 
 fun Modifier.animateContentSize(
-    animationSpec: Any? = null,
-    finishedListener: Any? = null,
+    animationSpec: AnimationSpec<IntSize> = snap(),
+    finishedListener: ((IntSize) -> Unit)? = null,
 ): Modifier = this
 
 class Animatable<T>(
@@ -55,7 +59,7 @@ class Animatable<T>(
 
     suspend fun animateTo(
         targetValue: T,
-        animationSpec: Any? = null,
+        animationSpec: AnimationSpec<T> = snap(),
         finishedListener: ((T) -> Unit)? = null,
     ) {
         value = targetValue
@@ -76,7 +80,7 @@ class Animatable<T>(
 @Composable
 fun <T> animateValueAsState(
     targetValue: T,
-    animationSpec: Any? = null,
+    animationSpec: AnimationSpec<T> = snap(),
     label: String = "",
     finishedListener: ((T) -> Unit)? = null,
 ): State<T> {
@@ -87,7 +91,7 @@ fun <T> animateValueAsState(
 @Composable
 fun animateFloatAsState(
     targetValue: Float,
-    animationSpec: Any? = null,
+    animationSpec: AnimationSpec<Float> = snap(),
     label: String = "",
     finishedListener: ((Float) -> Unit)? = null,
 ): State<Float> = animateValueAsState(targetValue, animationSpec, label, finishedListener)
@@ -95,7 +99,7 @@ fun animateFloatAsState(
 @Composable
 fun animateDpAsState(
     targetValue: Dp,
-    animationSpec: Any? = null,
+    animationSpec: AnimationSpec<Dp> = snap(),
     label: String = "",
     finishedListener: ((Dp) -> Unit)? = null,
 ): State<Dp> = animateValueAsState(targetValue, animationSpec, label, finishedListener)
@@ -103,7 +107,7 @@ fun animateDpAsState(
 @Composable
 fun animateColorAsState(
     targetValue: Color,
-    animationSpec: Any? = null,
+    animationSpec: AnimationSpec<Color> = snap(),
     label: String = "",
     finishedListener: ((Color) -> Unit)? = null,
 ): State<Color> = animateValueAsState(targetValue, animationSpec, label, finishedListener)
@@ -111,7 +115,7 @@ fun animateColorAsState(
 @Composable
 fun animateIntAsState(
     targetValue: Int,
-    animationSpec: Any? = null,
+    animationSpec: AnimationSpec<Int> = snap(),
     label: String = "",
     finishedListener: ((Int) -> Unit)? = null,
 ): State<Int> = animateValueAsState(targetValue, animationSpec, label, finishedListener)
@@ -119,7 +123,7 @@ fun animateIntAsState(
 @Composable
 fun animateIntOffsetAsState(
     targetValue: IntOffset,
-    animationSpec: Any? = null,
+    animationSpec: AnimationSpec<IntOffset> = snap(),
     label: String = "",
     finishedListener: ((IntOffset) -> Unit)? = null,
 ): State<IntOffset> = animateValueAsState(targetValue, animationSpec, label, finishedListener)
@@ -127,7 +131,7 @@ fun animateIntOffsetAsState(
 @Composable
 fun animateIntSizeAsState(
     targetValue: IntSize,
-    animationSpec: Any? = null,
+    animationSpec: AnimationSpec<IntSize> = snap(),
     label: String = "",
     finishedListener: ((IntSize) -> Unit)? = null,
 ): State<IntSize> = animateValueAsState(targetValue, animationSpec, label, finishedListener)
@@ -135,18 +139,18 @@ fun animateIntSizeAsState(
 @Composable
 fun animateOffsetAsState(
     targetValue: Offset,
-    animationSpec: Any? = null,
+    animationSpec: AnimationSpec<Offset> = snap(),
     label: String = "",
     finishedListener: ((Offset) -> Unit)? = null,
 ): State<Offset> = animateValueAsState(targetValue, animationSpec, label, finishedListener)
 
 @Composable
 fun animateSizeAsState(
-    targetValue: androidx.compose.ui.geometry.Size,
-    animationSpec: Any? = null,
+    targetValue: Size,
+    animationSpec: AnimationSpec<Size> = snap(),
     label: String = "",
-    finishedListener: ((androidx.compose.ui.geometry.Size) -> Unit)? = null,
-): State<androidx.compose.ui.geometry.Size> = animateValueAsState(targetValue, animationSpec, label, finishedListener)
+    finishedListener: ((Size) -> Unit)? = null,
+): State<Size> = animateValueAsState(targetValue, animationSpec, label, finishedListener)
 
 @Composable
 fun AnimatedVisibility(
@@ -191,7 +195,7 @@ class NoInfiniteTransition {
     fun animateFloat(
         initialValue: Float,
         targetValue: Float,
-        animationSpec: Any? = null,
+        animationSpec: AnimationSpec<Float> = snap(),
         label: String = "",
     ): State<Float> = rememberUpdatedState(initialValue)
 
@@ -199,7 +203,7 @@ class NoInfiniteTransition {
     fun animateColor(
         initialValue: Color,
         targetValue: Color,
-        animationSpec: Any? = null,
+        animationSpec: AnimationSpec<Color> = snap(),
         label: String = "",
     ): State<Color> = rememberUpdatedState(initialValue)
 
@@ -208,7 +212,7 @@ class NoInfiniteTransition {
         initialValue: T,
         targetValue: T,
         typeConverter: Any? = null,
-        animationSpec: Any? = null,
+        animationSpec: AnimationSpec<T> = snap(),
         label: String = "",
     ): State<T> = rememberUpdatedState(initialValue)
 }
